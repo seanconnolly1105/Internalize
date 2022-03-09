@@ -1,8 +1,33 @@
-console.log (`Starting the extension`);
 
-disableCategories ();
-processDashPage();
+// Helper Functions
+//**********************************************************************************************
 
+// Insert a node before another one
+//=================================
+function insertBefore(el, referenceNode) {
+  referenceNode.parentNode.insertBefore(el, referenceNode);
+}
+
+// Insert a node after another one
+//================================
+function insertAfter(newNode, existingNode) {
+  existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}
+
+//**********************************************************************************************
+
+// Find the theme name
+//====================
+function findTheme () {
+  const sections = document.querySelectorAll ('.ui-layout__section.ui-layout__section--primary .ui-card');
+  const section = sections[3];
+  const themes = section.querySelectorAll ('a');
+  const theme = themes[2];
+  themeName = theme.textContent.replace ('(opens a new window)', '').trim ();
+}
+
+// Disable all categories in the dropdown except for Design and Design Policy
+//===========================================================================
 function disableCategories() {
 
   document.querySelectorAll("#internal_note_category option").forEach((item) => {
@@ -13,21 +38,26 @@ function disableCategories() {
 
 }
 
-function insertBefore(el, referenceNode) {
-  referenceNode.parentNode.insertBefore(el, referenceNode);
-}
-
+// Get the design time and design
+//===============================
 function processCard () {
+
   const designTime = document.querySelector('dd#design-time');
   let designTimeUsed = designTime.textContent.toString().replace("\n      ", "");
-  designTimeUsed = designTimeUsed.replace (/minutes| |\n.*/g, "")
+//  designTimeUsed = designTimeUsed.replace (/minutes| |\n.*/g, "")
+  designTimeUsed = designTimeUsed.match(/\d/g);
   const designTimeToDate = Number (designTimeUsed);
   const card6 = document.querySelector ('.ui-card.box-card:nth-child(6)');
   const card3 = document.querySelector ('.ui-card.box-card:nth-child(3)');
 
+  // Set the card shadow and text colour
+  //====================================
   card6.style.color = "#fff";
   card6.style.boxShadow = "-4px 4px 10px #645d5d";
 
+  // Make the background colour of the card contingent on the time used
+  // < 45 minutes: green, >= 45 and < 60: orange, >=60: red
+  //===================================================================
   if (designTimeUsed >= 60) {
     card6.style.backgroundColor = "#d72c2c";
   } else if (designTimeUsed >= 45) {
@@ -36,8 +66,20 @@ function processCard () {
     card6.style.backgroundColor = "#008060";
   }
 
-
+  // Relocate the Design Time card to the top of the screen
+  //=======================================================
   insertBefore(card6, card3);
+
+  // Now add the Theme name to the Design Time card (card6)
+  //=======================================================
+  designTimeParent = designTime.parentNode;
+  const themeHeaderNode = document.createElement('dt');
+  themeHeaderNode.style = 'margin-top: 7px;';
+  const themeNameNode = document.createElement('dd');
+  themeHeaderNode.textContent = `Theme:`;
+  themeNameNode.textContent = themeName;
+  insertAfter(themeHeaderNode, designTimeParent.lastElementChild);
+  insertAfter(themeNameNode, designTimeParent.lastElementChild);
 
 }
 
@@ -60,3 +102,13 @@ function processDashPage() {
   observer.observe(document.querySelector(".ui-layout__section--secondary"), { subtree: true, childList: true });
 
 }
+
+// Main processing processing
+//===========================
+let themeName;
+
+findTheme ();
+disableCategories ();
+processDashPage();
+//============================
+//  End of main processing
