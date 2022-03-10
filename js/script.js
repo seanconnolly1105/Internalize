@@ -23,13 +23,11 @@ function findTheme () {
   let section;
   sections.forEach ( (sect) => {
     const firstLink = sect.querySelector ('a');
-//    console.log (`firstLink.href="${firstLink.getAttribute('href')}`);
     if (firstLink && firstLink.getAttribute('href') == '#themes') {
       section = sect;
       console.log (`firstLink.getAttribute('href'): ${firstLink.getAttribute('href')}`);
     }
   })
-//  const section = sections[3];
   const themes = section.querySelectorAll ('a');
   const theme = themes[2];
   themeName = theme.textContent.replace ('(opens a new window)', '').trim ();
