@@ -53,8 +53,8 @@ function processCard () {
 
   const designTime = document.querySelector('dd#design-time');
   let designTimeUsed = designTime.textContent.toString().replace("\n      ", "");
-//  designTimeUsed = designTimeUsed.replace (/minutes| |\n.*/g, "")
-  designTimeUsed = designTimeUsed.match(/\d/g);
+  designTimeUsed = designTimeUsed.replace (/minutes| |\n.*/g, "")
+//  designTimeUsed = designTimeUsed.match(/\d/g);
   const designTimeToDate = Number (designTimeUsed);
   const card6 = document.querySelector ('.ui-card.box-card:nth-child(6)');
   const card3 = document.querySelector ('.ui-card.box-card:nth-child(3)');
@@ -67,9 +67,12 @@ function processCard () {
   // Make the background colour of the card contingent on the time used
   // < 45 minutes: green, >= 45 and < 60: orange, >=60: red
   //===================================================================
-  if (designTimeUsed >= 60) {
+  console.log(`designTimeToDate: ${typeof designTimeToDate}`);
+  console.log(`designTimeToDate: ${designTimeToDate}`);
+  console.log(`designTimeUsed: ${designTimeUsed}`);
+  if (designTimeToDate >= 60) {
     card6.style.backgroundColor = "#d72c2c";
-  } else if (designTimeUsed >= 45) {
+  } else if (designTimeToDate >= 45) {
     card6.style.backgroundColor = "#f5a614";
   } else {
     card6.style.backgroundColor = "#008060";
