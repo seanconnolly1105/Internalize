@@ -20,7 +20,16 @@ function insertAfter(newNode, existingNode) {
 //====================
 function findTheme () {
   const sections = document.querySelectorAll ('.ui-layout__section.ui-layout__section--primary .ui-card');
-  const section = sections[3];
+  let section;
+  sections.forEach ( (sect) => {
+    const firstLink = sect.querySelector ('a');
+//    console.log (`firstLink.href="${firstLink.getAttribute('href')}`);
+    if (firstLink && firstLink.getAttribute('href') == '#themes') {
+      section = sect;
+      console.log (`firstLink.getAttribute('href'): ${firstLink.getAttribute('href')}`);
+    }
+  })
+//  const section = sections[3];
   const themes = section.querySelectorAll ('a');
   const theme = themes[2];
   themeName = theme.textContent.replace ('(opens a new window)', '').trim ();
