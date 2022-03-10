@@ -21,13 +21,15 @@ function insertAfter(newNode, existingNode) {
 function findTheme () {
   const sections = document.querySelectorAll ('.ui-layout__section.ui-layout__section--primary .ui-card');
   let section;
-  sections.forEach ( (sect) => {
+  // Have to use an ordinary loop because the breaks statement not allow in forEach
+  for (let i = 0; i < sections.length; i++) {
+    const sect = sections[i];
     const firstLink = sect.querySelector ('a');
     if (firstLink && firstLink.getAttribute('href') == '#themes') {
       section = sect;
-      console.log (`firstLink.getAttribute('href'): ${firstLink.getAttribute('href')}`);
+      break;
     }
-  })
+  }
   const themes = section.querySelectorAll ('a');
   const theme = themes[2];
   themeName = theme.textContent.replace ('(opens a new window)', '').trim ();
